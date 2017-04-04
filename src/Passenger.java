@@ -60,9 +60,9 @@ public class Passenger {
 		travelRoute = distance.lookUpRoute(pickUp, destination);
 		this.speed = speed;
 		 pickUpStart = callTime;
+		 dropOffEnd = arrivalTime;
 		 pickUpEnd = dropOffEnd-travelTime;
 		 dropOffStart = pickUpStart + travelTime;
-		 dropOffEnd = arrivalTime;
 	}
 	
 	public Node getPickUpLocation(){
