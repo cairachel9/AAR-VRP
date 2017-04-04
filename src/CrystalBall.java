@@ -24,6 +24,7 @@ public class CrystalBall {
 	static Set<Car> readyCars = new HashSet<Car>();
 	static Graph originalGraph = new Graph();
 	static Graph expandedGraph = new Graph();
+  	static Map<Set<Passenger>,List<Passenger>> cachedPaths = new HashMap<>();
 
 	public static void main(String[] args) throws Exception{
 		ArrayList<Passenger> waitingList = new ArrayList<Passenger>();
@@ -86,15 +87,16 @@ public class CrystalBall {
 			Car a = new Car(i, l, expandedGraph.distance);
 			cars[i] = a;
 		}
-		System.out.println(passengers);
-		assign(passengers, 0, cars);
+		System.out.println("Passengers: " + passengers);
+		assign(passengers, 0, cars, "");
 
 		System.out.println("Optimal Assignment: " + optimalAssignment);
 	}
 
-	public static void assign(ArrayList<Passenger> passengers, int i, Car[] cars){
+	public static void assign(ArrayList<Passenger> passengers, int i, Car[] cars,
+				  String indentStr){
 		if (i >= passengers.size()) {
-			validate();
+			validate(indentStr);
 			return;
 		}
 		Passenger p = passengers.get(i);
@@ -105,30 +107,30 @@ public class CrystalBall {
 				assignments.put(c, pSet);
 			}
 			pSet.add(p);
-			assign(passengers, i+1, cars);
+			assign(passengers, i+1, cars, indentStr + "  ");
 			pSet.remove(p);
 		}
 	}
 
-	public static void validate(){
-		System.out.println("Assignments: " + assignments);
+	public static void validate(String indentStr){
+		System.out.println(indentStr + "Validating assignments: " + assignments);
 
 		boolean allValid = true;
 		int totalDistance = 0;
 		for (Car c : assignments.keySet()){
-			List<Passenger> best = path(assignments.get(c));
-			//System.out.println("best: " + best);
-			if (best != null && !best.isEmpty()){
-				System.out.println("Car " + c + " = " + best);
+			List<Passenger> best = path(assignments.get(c), indentStr + "  ");
+		  	if (expandedGraph.distance.validChain(c.currentLocation, 0, best, carSpeed, indentStr)) {
+			  	totalDistance += expandedGraph.distance.lookUpDistance(c.currentLocation, best.get(0).getPickUpLocation());
 				totalDistance +=  expandedGraph.distance.distances(best);
 			} else {
 				allValid = false;
 			}
 		}
 		if (allValid){
-			if (totalDistance <= shortestDistance){
+		  	System.out.println(indentStr + "-->AllValid, distinace: " + totalDistance + ", for " + assignments);
+			if (totalDistance < shortestDistance){
 				shortestDistance = Math.min(shortestDistance, totalDistance);
-				System.out.println("totalDistance: " + totalDistance);
+				System.out.println(indentStr + "-->Current totalDistance: " + totalDistance);
 				optimalAssignment = new HashMap<Car, Set<Passenger>>();
 				for (Car c : assignments.keySet()){
 					Set<Passenger> passengers = new HashSet<Passenger>();
@@ -140,13 +142,18 @@ public class CrystalBall {
 		}
 	}
 
-	public static List<Passenger> path(Set<Passenger> passengers){
-		List<Passenger> best = new ArrayList<Passenger>();
+	public static List<Passenger> path(Set<Passenger> passengers, String indentStr) {
+	  	List<Passenger> best = cachedPaths.get(passengers);
+	  	if (best != null) {
+		  return best;
+		}
+	  	best = new ArrayList<>();
+	  	System.out.println(indentStr + "Path for passengers: " + passengers);
 
 		if(passengers.size() <= 1){
-			List<Passenger> a = new ArrayList<Passenger>();
-			a.addAll(passengers);
-			return a;
+			best.addAll(passengers);
+		  	cachedPaths.put(passengers, best);
+			return best;
 		}
 
 		int bestDistance = Integer.MAX_VALUE;
@@ -156,28 +163,22 @@ public class CrystalBall {
 			Set<Passenger> p2 = new HashSet<Passenger>();
 			p2.addAll(passengers);
 			p2.remove(p);
-			List<Passenger> childPath = path(p2);
+		  	System.out.println(indentStr + "Trying head: " + a + " tail: " + p2);
+			List<Passenger> childPath = path(p2, indentStr + "  ");
 
 			//check if valid (p1 comes before p2)
-			if (childPath != null && !childPath.isEmpty()) {
-				System.out.println("childPath: " + childPath);
-				Passenger first = a.get(0);
-				Passenger second = childPath.get(0);
-				int time = first.dropOffStart + expandedGraph.distance.lookUpDistance(first.getDropOffLocation(), second.getPickUpLocation());
-
-				System.out.println("time: " + time + " + pickUpEnd: " + second.pickUpEnd);
-				System.out.println("dropOffEnd: " + second.dropOffEnd + " + travelTime: " + second.travelTime);
-				if (time <= second.pickUpEnd){
-					System.out.println("a: " + a);
-					a.addAll(childPath);
-					int distance = expandedGraph.distance.distances(childPath);
-					if (distance < bestDistance) {
-						best = a;
-					}
+		  	if (expandedGraph.distance.validChain(p.getDropOffLocation(), p.dropOffStart,
+			    childPath, carSpeed, indentStr)) {
+			  	a.addAll(childPath);
+			  	int distance = expandedGraph.distance.distances(a);
+			  	System.out.println(indentStr + "Valid distance:" + distance + ", a: " + a);
+			  	if (distance < bestDistance) {
+				  best = a;
 				}
 			}
 		}
-		System.out.println("best: " + best);
+		System.out.println(indentStr + "Best: " + best);
+	  	cachedPaths.put(passengers, best);
 		return best;
 	}
 }
