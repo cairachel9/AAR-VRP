@@ -1,13 +1,12 @@
-4 4
-A B 1
-B C 1
-C D 1
-A D 1
+4 3
+A B 4
+B D 8
+C D 5
 4
 Alex A D 15 0
-Bob C A 27 8
+Bob C A 40 0
 Callie D B 22 10
-Dylan A B 14 15
+Dylan A B 14 0
 3
 A
 A

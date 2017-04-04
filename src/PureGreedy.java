@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -13,7 +14,7 @@ public class PureGreedy {
 
 	static int taxiFareRatio = 2;
 	static int gasRatio = 1;
-	static int carSpeed = 1;
+	static double carSpeed = 1;
 	static int driverCost = 1;
 	static ArrayList<Passenger> passengers = new ArrayList<Passenger>();
 	static Set<Car> readyCars = new HashSet<Car>();
@@ -43,7 +44,6 @@ public class PureGreedy {
 		}
 
 
-
 		if (originalGraph.edges.size() != edges){
 			throw new Exception("expected " + edges + " amount of edges, received " + originalGraph.edges);
 		} 
@@ -70,7 +70,7 @@ public class PureGreedy {
 			Node destination = expandedGraph.findNode(st.nextToken());
 			int arrivalTime = Integer.parseInt(st.nextToken());
 			int callTime = Integer.parseInt(st.nextToken());
-			Passenger p = new Passenger(name, pickUp, destination, arrivalTime, callTime, expandedGraph.distance);
+			Passenger p = new Passenger(name, pickUp, destination, arrivalTime, callTime, expandedGraph.distance, carSpeed);
 			passengers.add(p);
 		}
 
@@ -88,6 +88,7 @@ public class PureGreedy {
 			for (Car a : cars){
 				//update cars' location
 				if (a.route != null) {
+						System.out.println("Car " + a + ": " + a.passenger + " @Time: " + t);
 					if (a.currentLocation == a.dropOff){
 						a.removePassenger();
 						readyCars.add(a);
@@ -163,7 +164,7 @@ public class PureGreedy {
 		System.out.println(totalRevenue - expense);
 		
 		for (Passenger p : passengers){
-			if (!p.servicable) System.out.println(p.passenger);
+			if (!p.servicable) System.out.println("Unservicable: " + p.passenger);
 		}
 	}
 }

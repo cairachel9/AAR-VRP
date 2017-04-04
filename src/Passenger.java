@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class Passenger {
 	/**
@@ -30,21 +31,38 @@ public class Passenger {
 	 */
 	int travelDistance;
 	
+	int travelTime;
+	List<Node> travelRoute;
+	
 	boolean servicable = true;
 	
 	Distance distance;
 	
+	double speed;
+	
+	int pickUpStart;
+	int pickUpEnd;
+	
+	int dropOffStart;
+	int dropOffEnd;
+	
 	public Passenger(){}
 		
-	public Passenger(String passenger, Node pickUp, Node destination, int arrivalTime, int callTime, Distance distance){
+	public Passenger(String passenger, Node pickUp, Node destination, int arrivalTime, int callTime, Distance distance, double speed){
 		this.passenger = passenger;
 		this.pickUp = pickUp;
 		this.destination = destination;
 		this.arrivalTime = arrivalTime;
 		this.callTime = callTime;
-		System.out.println(passenger);
 		this.distance = distance;
 		travelDistance = distance.lookUpDistance(pickUp, destination);
+		travelTime = (int) (travelDistance / speed);
+		travelRoute = distance.lookUpRoute(pickUp, destination);
+		this.speed = speed;
+		 pickUpStart = callTime;
+		 pickUpEnd = dropOffEnd-travelTime;
+		 dropOffStart = pickUpStart + travelTime;
+		 dropOffEnd = arrivalTime;
 	}
 	
 	public Node getPickUpLocation(){

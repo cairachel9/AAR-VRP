@@ -46,6 +46,21 @@ public class Distance {
 		return route.size() - 1;
 	}
 	
+	public int distances(List<Passenger> passengers){
+		ArrayList<Node> route = new ArrayList<Node>();
+		for (Passenger p : passengers){
+			route.addAll(p.travelRoute);
+		}
+		int totalDistance = 0;
+		Node a = route.get(0);
+		for (int i = 1; i < route.size(); i++){
+			Node b = route.get(i);
+			totalDistance += lookUpDistance(a, b);
+			a = b;
+		}
+		return totalDistance;
+	}
+	
 	public String toString(){
 		return map.toString();
 	}

@@ -65,7 +65,7 @@ public class Graph {
 			}
 		}
 		distance = new Distance(map);
-		System.out.println("Shortest distance: " + distance.map);
+		//System.out.println("Shortest distance: " + distance.map);
 	}
 
 	public Route shortestPath(Node i, Node j, Set<Node> intermediate){
@@ -81,12 +81,12 @@ public class Graph {
 				l.add(i);
 				l.add(j);
 				Route r = new Route(l, 1);
-				System.out.println("Taking direct: " + key + ":" + r);
+				//System.out.println("Taking direct: " + key + ":" + r);
 				visited.put(key, r);
 				return r;
 			} else {
 				Route r = new Route(null, MAX_DISTANCE);
-				System.out.println("No route: " + key + ":" + r);
+				//System.out.println("No route: " + key + ":" + r);
 				visited.put(key, r);
 				return r;
 			}
@@ -104,13 +104,13 @@ public class Graph {
 			//System.out.println("c: " + c);
 
 			if (a.distance < b.distance + c.distance){
-				System.out.println("Taking a: " + key + ":" + a);
+				//System.out.println("Taking a: " + key + ":" + a);
 				visited.put(key, a);
 				return a;
 			} else {
 				LinkedList<Node> l = Route.link(b.route, c.route);
 				Route d = new Route(l, l == null ? MAX_DISTANCE : l.size());
-				System.out.println("Taking d: " + key + ":" + d);				
+				//System.out.println("Taking d: " + key + ":" + d);				
 				visited.put(key, d);
 				return d;
 			}

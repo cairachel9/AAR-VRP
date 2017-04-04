@@ -95,7 +95,7 @@ public class Car {
 	}
 	
 	public String toString(){
-		return id + currentLocation.toString();
+		return id + "" /*currentLocation.toString()*/;
 	}
 
 }
