@@ -111,13 +111,13 @@ public class CrystalBall {
 	}
 
 	public static void validate(){
-		System.out.println(assignments);
+		System.out.println("Assignments: " + assignments);
 
 		boolean allValid = true;
 		int totalDistance = 0;
 		for (Car c : assignments.keySet()){
-			System.out.println("Car: " + c);
 			List<Passenger> best = path(assignments.get(c));
+			//System.out.println("best: " + best);
 			if (best != null && !best.isEmpty()){
 				System.out.println("Car " + c + " = " + best);
 				totalDistance +=  expandedGraph.distance.distances(best);
@@ -125,6 +125,7 @@ public class CrystalBall {
 				allValid = false;
 			}
 		}
+		System.out.println(allValid);
 		if (allValid){
 			shortestDistance = Math.min(shortestDistance, totalDistance);
 			optimalAssignment = new HashMap<Car, Set<Passenger>>();
@@ -156,12 +157,13 @@ public class CrystalBall {
 
 			//check if valid (p1 comes before p2)
 			if (childPath != null && !childPath.isEmpty()) {
-				System.out.println(childPath);
+				System.out.println("childPath: " + childPath);
 				Passenger first = a.get(0);
 				Passenger second = childPath.get(0);
 				int time = first.dropOffStart + expandedGraph.distance.lookUpDistance(first.getDropOffLocation(), second.getPickUpLocation());
-				
-				System.out.println("time: " + time);if (time <= second.pickUpEnd){
+
+				System.out.println("time: " + time + " " + second.pickUpEnd);
+				if (time <= second.pickUpEnd){
 					System.out.println("a: " + a);
 					a.addAll(childPath);
 					int distance = expandedGraph.distance.distances(childPath);
@@ -171,6 +173,7 @@ public class CrystalBall {
 				}
 			}
 		}
+		System.out.println("best: " + best);
 		return best;
 	}
 }
