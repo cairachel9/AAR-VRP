@@ -1,5 +1,8 @@
 import java.util.List;
 
+/**
+ * A class represents Passenger.
+ */
 public class Passenger {
 	/**
 	 * name of passenger
