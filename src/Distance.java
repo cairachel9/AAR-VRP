@@ -70,10 +70,10 @@ public class Distance {
   	public boolean validChain(Node head, int headTime, List<Passenger> childPath, double carSpeed,
 				  String indentStr) {
 	  if (childPath != null && !childPath.isEmpty()) {
-	    System.out.println(indentStr + "head: " + head + ", childPath: " + childPath);
+	    System.out.println(indentStr + "Head node: " + head + ", childPath: " + childPath);
 	    Passenger second = childPath.get(0);
 	    Passenger last = childPath.get(childPath.size() - 1);
-	    int arriveTime = headTime + lookUpDistance(head, second.getPickUpLocation());
+	    int arriveTime = headTime + (int)(lookUpDistance(head, second.getPickUpLocation())/carSpeed);
 	    int pickUpEndTime = (int) ((last.dropOffEnd - distances(childPath)) / carSpeed);
 
 	    System.out.println(indentStr + "Arrive time: " + arriveTime + " + pickUpEnd: " + pickUpEndTime);

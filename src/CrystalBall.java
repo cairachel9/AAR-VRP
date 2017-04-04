@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 public class CrystalBall {
 
 	static Map<Car, Set<Passenger>> assignments = new HashMap<>();
-	static Map<Car, Set<Passenger>> optimalAssignment;
+	static Map<Car, List<Passenger>> optimalAssignment;
 	static int taxiFareRatio = 2;
 	static int gasRatio = 1;
 	static double carSpeed = 1;
@@ -117,9 +117,11 @@ public class CrystalBall {
 
 		boolean allValid = true;
 		int totalDistance = 0;
-		for (Car c : assignments.keySet()){
+	  	Map<Car,List<Passenger>> orderedAssignment = new HashMap<>();
+	  	for (Car c : assignments.keySet()){
 			List<Passenger> best = path(assignments.get(c), indentStr + "  ");
-		  	if (expandedGraph.distance.validChain(c.currentLocation, 0, best, carSpeed, indentStr)) {
+		  	orderedAssignment.put(c, best);
+		  	if (expandedGraph.distance.validChain(c.currentLocation, 0, best, carSpeed, indentStr + "  ")) {
 			  	totalDistance += expandedGraph.distance.lookUpDistance(c.currentLocation, best.get(0).getPickUpLocation());
 				totalDistance +=  expandedGraph.distance.distances(best);
 			} else {
@@ -127,18 +129,15 @@ public class CrystalBall {
 			}
 		}
 		if (allValid){
-		  	System.out.println(indentStr + "-->AllValid, distinace: " + totalDistance + ", for " + assignments);
+		  	System.out.println(indentStr + "---> AllValid, distinace: " + totalDistance + ", for " + orderedAssignment);
 			if (totalDistance < shortestDistance){
 				shortestDistance = Math.min(shortestDistance, totalDistance);
-				System.out.println(indentStr + "-->Current totalDistance: " + totalDistance);
-				optimalAssignment = new HashMap<Car, Set<Passenger>>();
-				for (Car c : assignments.keySet()){
-					Set<Passenger> passengers = new HashSet<Passenger>();
-					passengers.addAll(assignments.get(c));
-					optimalAssignment.put(c, passengers);
-				}
+				System.out.println(indentStr + "---> Current totalDistance: " + totalDistance);
+				optimalAssignment = orderedAssignment;
 			}
 
+		} else {
+		  System.out.println(indentStr + "Not valid: " + assignments);
 		}
 	}
 
@@ -148,7 +147,7 @@ public class CrystalBall {
 		  return best;
 		}
 	  	best = new ArrayList<>();
-	  	System.out.println(indentStr + "Path for passengers: " + passengers);
+	  	System.out.println(indentStr + "Path for passenger set: {" + passengers + "}");
 
 		if(passengers.size() <= 1){
 			best.addAll(passengers);
@@ -177,7 +176,7 @@ public class CrystalBall {
 				}
 			}
 		}
-		System.out.println(indentStr + "Best: " + best);
+		System.out.println(indentStr + "-> Best for set: " + passengers + "} is: " + best);
 	  	cachedPaths.put(passengers, best);
 		return best;
 	}
