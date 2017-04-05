@@ -88,8 +88,8 @@ public class PureGreedy {
 			for (Car a : cars){
 				//update cars' location
 				if (a.route != null) {
-						System.out.println("Car " + a + ": " + a.passenger + " @Time: " + t);
-					if (a.currentLocation == a.dropOff){
+					System.out.println("Car " + a + ": " + a.passenger + " @Time: " + t);
+					if (a.currentLocation == a.dropOff && a.route.size() == 1){
 						a.removePassenger();
 						readyCars.add(a);
 					} else {
@@ -154,15 +154,17 @@ public class PureGreedy {
 		for (Car a : cars){
 			totalRevenue += taxiFareRatio * a.billableMileage;
 			expense += gasRatio * a.mileage;
+			System.out.println("Car " + a  + " " + a.mileage );
 		}
 
-		System.out.println(cars.length + " " + driverCost);
+		System.out.println("Expense: " + expense);
+		//System.out.println(cars.length + " " + driverCost);
 		expense += cars.length * driverCost;
 
-		System.out.println(totalRevenue);
-		System.out.println(expense);
-		System.out.println(totalRevenue - expense);
-		
+		System.out.println("Total Revenue: " + totalRevenue);
+		System.out.println("Expense: " + expense);
+		System.out.println("Profit: " + (totalRevenue - expense));
+
 		for (Passenger p : passengers){
 			if (!p.servicable) System.out.println("Unservicable: " + p.passenger);
 		}

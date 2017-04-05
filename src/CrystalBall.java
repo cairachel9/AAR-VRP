@@ -20,11 +20,12 @@ public class CrystalBall {
 	static double carSpeed = 1;
 	static int driverCost = 1;
 	static int shortestDistance = Integer.MAX_VALUE;
+	static int least = Integer.MAX_VALUE;
 	static ArrayList<Passenger> passengers = new ArrayList<Passenger>();
 	static Set<Car> readyCars = new HashSet<Car>();
 	static Graph originalGraph = new Graph();
 	static Graph expandedGraph = new Graph();
-  	static Map<Set<Passenger>,List<Passenger>> cachedPaths = new HashMap<>();
+	static Map<Set<Passenger>,List<Passenger>> cachedPaths = new HashMap<>();
 
 	public static void main(String[] args) throws Exception{
 		ArrayList<Passenger> waitingList = new ArrayList<Passenger>();
@@ -91,10 +92,28 @@ public class CrystalBall {
 		assign(passengers, 0, cars, "");
 
 		System.out.println("Optimal Assignment: " + optimalAssignment);
+		simulate();
+
+		int totalRevenue = 0;
+		int expense = gasRatio * shortestDistance;
+
+		System.out.println("Expense: " + expense);
+		for (Car a : cars){
+			totalRevenue += taxiFareRatio * a.billableMileage;
+			//expense += gasRatio * a.mileage;
+		}
+		
+		//System.out.println(cars.length + " " + driverCost);
+		expense += cars.length * driverCost;
+
+		System.out.println("Total Revenue: " + totalRevenue);
+		System.out.println("Expense: " + expense);
+		System.out.println("Profit: " + (totalRevenue - expense));
+
 	}
 
 	public static void assign(ArrayList<Passenger> passengers, int i, Car[] cars,
-				  String indentStr){
+			String indentStr){
 		if (i >= passengers.size()) {
 			validate(indentStr);
 			return;
@@ -117,41 +136,53 @@ public class CrystalBall {
 
 		boolean allValid = true;
 		int totalDistance = 0;
-	  	Map<Car,List<Passenger>> orderedAssignment = new HashMap<>();
-	  	for (Car c : assignments.keySet()){
+		Map<Car,List<Passenger>> orderedAssignment = new HashMap<>();
+		for (Car c : assignments.keySet()){
 			List<Passenger> best = path(assignments.get(c), indentStr + "  ");
-		  	orderedAssignment.put(c, best);
-		  	if (expandedGraph.distance.validChain(c.currentLocation, 0, best, carSpeed, indentStr + "  ")) {
-			  	totalDistance += expandedGraph.distance.lookUpDistance(c.currentLocation, best.get(0).getPickUpLocation());
+			orderedAssignment.put(c, best);
+			if (expandedGraph.distance.validChain(c.currentLocation, 0, best, carSpeed, indentStr + "  ")) {
+				totalDistance += expandedGraph.distance.lookUpDistance(c.currentLocation, best.get(0).getPickUpLocation());
 				totalDistance +=  expandedGraph.distance.distances(best);
 			} else {
 				allValid = false;
 			}
 		}
 		if (allValid){
-		  	System.out.println(indentStr + "---> AllValid, distinace: " + totalDistance + ", for " + orderedAssignment);
-			if (totalDistance < shortestDistance){
+			int mileage = 0;
+			int billeableMileage = 0;
+			for (Car c : orderedAssignment.keySet()){
+				List<Passenger> passengers = orderedAssignment.get(c);
+				Node currentLocation = c.currentLocation;
+				mileage += expandedGraph.distance.lookUpDistance(currentLocation, passengers.get(0).getPickUpLocation());
+				mileage += expandedGraph.distance.distances(passengers);
+				for (Passenger p : passengers){
+					billeableMileage += p.travelDistance; 
+				}
+
+			}
+			int idleDriving = mileage - billeableMileage;
+			if (totalDistance <= shortestDistance){
 				shortestDistance = Math.min(shortestDistance, totalDistance);
 				System.out.println(indentStr + "---> Current totalDistance: " + totalDistance);
 				optimalAssignment = orderedAssignment;
 			}
 
 		} else {
-		  System.out.println(indentStr + "Not valid: " + assignments);
+			System.out.println(indentStr + "Not valid: " + assignments);
 		}
 	}
 
 	public static List<Passenger> path(Set<Passenger> passengers, String indentStr) {
-	  	List<Passenger> best = cachedPaths.get(passengers);
-	  	if (best != null) {
-		  return best;
+		List<Passenger> best = cachedPaths.get(passengers);
+		if (best != null) {
+			return best;
 		}
-	  	best = new ArrayList<>();
-	  	System.out.println(indentStr + "Path for passenger set: {" + passengers + "}");
+		best = new ArrayList<>();
+		System.out.println(indentStr + "Path for passenger set: {" + passengers + "}");
 
 		if(passengers.size() <= 1){
 			best.addAll(passengers);
-		  	cachedPaths.put(passengers, best);
+			cachedPaths.put(passengers, best);
 			return best;
 		}
 
@@ -162,22 +193,39 @@ public class CrystalBall {
 			Set<Passenger> p2 = new HashSet<Passenger>();
 			p2.addAll(passengers);
 			p2.remove(p);
-		  	System.out.println(indentStr + "Trying head: " + a + " tail: " + p2);
+			System.out.println(indentStr + "Trying head: " + a + " tail: " + p2);
 			List<Passenger> childPath = path(p2, indentStr + "  ");
 
 			//check if valid (p1 comes before p2)
-		  	if (expandedGraph.distance.validChain(p.getDropOffLocation(), p.dropOffStart,
-			    childPath, carSpeed, indentStr)) {
-			  	a.addAll(childPath);
-			  	int distance = expandedGraph.distance.distances(a);
-			  	System.out.println(indentStr + "Valid distance:" + distance + ", a: " + a);
-			  	if (distance < bestDistance) {
-				  best = a;
+			if (expandedGraph.distance.validChain(p.getDropOffLocation(), p.dropOffStart,
+					childPath, carSpeed, indentStr)) {
+				a.addAll(childPath);
+				int distance = expandedGraph.distance.distances(a);
+				System.out.println(indentStr + "Valid distance:" + distance + ", a: " + a);
+				if (distance < bestDistance) {
+					best = a;
 				}
 			}
 		}
 		System.out.println(indentStr + "-> Best for set: " + passengers + "} is: " + best);
-	  	cachedPaths.put(passengers, best);
+		cachedPaths.put(passengers, best);
 		return best;
+	}
+
+	public static void simulate(){
+		for (Car c : optimalAssignment.keySet()){
+			List<Passenger> passengers = optimalAssignment.get(c);
+			int mileage = 0;
+			int billeableMileage = 0;
+			Node currentLocation = c.currentLocation;
+			mileage += expandedGraph.distance.lookUpDistance(currentLocation, passengers.get(0).getPickUpLocation());
+			mileage += expandedGraph.distance.distances(passengers);
+			for (Passenger p : passengers){
+				billeableMileage += p.travelDistance; 
+			}
+			c.mileage = mileage;
+			c.billableMileage = billeableMileage;
+
+		}
 	}
 }
