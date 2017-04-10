@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Distance {
 	Map<String, LinkedList<Node>> map = new HashMap<String, LinkedList<Node>>();
-  	Map<List<Passenger>, Integer> cachedDistance = new HashMap<>();
+	Map<List<Passenger>, Integer> cachedDistance = new HashMap<>();
 	
 	public Distance (Map<String, LinkedList<Node>> map){
 		this.map = map;
@@ -48,9 +48,9 @@ public class Distance {
 	}
 	
 	public int distances(List<Passenger> passengers) {
-	  	Integer distance = cachedDistance.get(passengers);
-	  	if (distance != null) {
-		  return distance;
+		Integer distance = cachedDistance.get(passengers);
+		if (distance != null) {
+			return distance;
 		}
 		ArrayList<Node> route = new ArrayList<Node>();
 		for (Passenger p : passengers){
@@ -63,25 +63,25 @@ public class Distance {
 			totalDistance += lookUpDistance(a, b);
 			a = b;
 		}
-	  	cachedDistance.put(passengers, totalDistance);
+		cachedDistance.put(passengers, totalDistance);
 		return totalDistance;
 	}
 
-  	public boolean validChain(Node head, int headTime, List<Passenger> childPath, double carSpeed,
-				  String indentStr) {
-	  if (childPath != null && !childPath.isEmpty()) {
-	    System.out.println(indentStr + "Head node: " + head + ", childPath: " + childPath);
-	    Passenger second = childPath.get(0);
-	    Passenger last = childPath.get(childPath.size() - 1);
-	    int arriveTime = headTime + (int)(lookUpDistance(head, second.getPickUpLocation())/carSpeed);
-	    int pickUpEndTime = (int) ((last.dropOffEnd - distances(childPath)) / carSpeed);
+	public boolean validChain(Node head, int headTime, List<Passenger> childPath, double carSpeed,
+					String indentStr) {
+		if (childPath != null && !childPath.isEmpty()) {
+			System.out.println(indentStr + "Head node: " + head + ", childPath: " + childPath);
+			Passenger second = childPath.get(0);
+			Passenger last = childPath.get(childPath.size() - 1);
+			int arriveTime = headTime + (int)(lookUpDistance(head, second.getPickUpLocation())/carSpeed);
+			int pickUpEndTime = (int) ((last.dropOffEnd - distances(childPath)) / carSpeed);
 
-	    System.out.println(indentStr + "Arrive time: " + arriveTime + " + pickUpEnd: " + pickUpEndTime);
-	    if (arriveTime <= pickUpEndTime) {
-	      return true;
-	    }
-	  }
-	  return false;
+			System.out.println(indentStr + "Arrive time: " + arriveTime + " + pickUpEnd: " + pickUpEndTime);
+			if (arriveTime <= pickUpEndTime) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String toString(){

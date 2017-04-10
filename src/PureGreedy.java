@@ -104,28 +104,28 @@ public class PureGreedy {
 			}
 
 			for (Passenger p : passengers){
-				if (p.servicable && p.callTime == t){  //check if new passengers have called in
+				if (p.servicable && p.callTime == t) { //check if new passengers have called in
 					//add passenger to waiting list
 					waitingList.add(p);
 				}
 			}
 
 			Iterator<Passenger> it = waitingList.iterator();
-			while (it.hasNext())  {  //get passengers in waiting list
+			while (it.hasNext()) { //get passengers in waiting list
 				Passenger p = it.next();
 				boolean foundDriver = false;
 				Car closest = null;
 				int closestDistance = Integer.MAX_VALUE;
-				for (Car a : readyCars){  //for every available car
+				for (Car a : readyCars) { //for every available car
 					int dist = expandedGraph.distance.lookUpDistance(a.currentLocation, p.pickUp);
-					if (dist < closestDistance){  //check if it's the closest car to passenger
+					if (dist < closestDistance) { //check if it's the closest car to passenger
 						closest = a;
 						closestDistance = dist;
 						foundDriver = true;
 					}
 				}
 				if (foundDriver){
-					if (((p.getArrivalTime() - t) * carSpeed) - (closestDistance + p.travelDistance) >= 0) {  //check if they can make it to the first passenger's destination in time 
+					if (((p.getArrivalTime() - t) * carSpeed) - (closestDistance + p.travelDistance) >= 0) { //check if they can make it to the first passenger's destination in time 
 						closest.assignPassenger(p);
 						it.remove();
 						/*waitingList.remove(p);*/
@@ -141,7 +141,7 @@ public class PureGreedy {
 			Iterator<Passenger> wit = waitingList.iterator();
 			while (wit.hasNext()) {
 				Passenger p = wit.next();
-				if (carSpeed * (p.arrivalTime - t) <=  expandedGraph.distance.lookUpDistance(p.pickUp, p.destination)) { //if the passenger cannot get there in time
+				if (carSpeed * (p.arrivalTime - t) <= expandedGraph.distance.lookUpDistance(p.pickUp, p.destination)) { //if the passenger cannot get there in time
 					p.servicable = false;
 					wit.remove(); //remove the passenger from the waiting list
 				}
@@ -154,7 +154,7 @@ public class PureGreedy {
 		for (Car a : cars){
 			totalRevenue += taxiFareRatio * a.billableMileage;
 			expense += gasRatio * a.mileage;
-			System.out.println("Car " + a  + " " + a.mileage );
+			System.out.println("Car " + a + " " + a.mileage );
 		}
 
 		System.out.println("Expense: " + expense);

@@ -142,7 +142,7 @@ public class CrystalBall {
 			orderedAssignment.put(c, best);
 			if (expandedGraph.distance.validChain(c.currentLocation, 0, best, carSpeed, indentStr + "  ")) {
 				totalDistance += expandedGraph.distance.lookUpDistance(c.currentLocation, best.get(0).getPickUpLocation());
-				totalDistance +=  expandedGraph.distance.distances(best);
+				totalDistance += expandedGraph.distance.distances(best);
 			} else {
 				allValid = false;
 			}

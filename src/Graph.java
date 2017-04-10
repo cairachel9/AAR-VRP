@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Graph {
 	Set<Node> nodes = new HashSet<Node>();
-	Set<Edge> edges =  new HashSet<Edge>();
+	Set<Edge> edges = new HashSet<Edge>();
 	Distance distance;
 	Map<String, Route> visited = new HashMap<>();
 	private static final int MAX_DISTANCE = Integer.MAX_VALUE / 2;
