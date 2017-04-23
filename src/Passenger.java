@@ -28,7 +28,12 @@ public class Passenger {
 	 * when the passenger called in
 	 */
 	int callTime;
-	
+
+	/**
+	 * when the passenger request should be dispatched
+	 */
+	int dispatchTime = -1;
+
 	/**
 	 * distance from the passenger's pickup location to destination
 	 */

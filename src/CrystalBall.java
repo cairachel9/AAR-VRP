@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+/**
+ * An algorithm sees all events in the future and optimize globally
+ */
 public class CrystalBall {
 
 	static Map<Car, Set<Passenger>> assignments = new HashMap<>();
@@ -97,7 +100,7 @@ public class CrystalBall {
 		int totalRevenue = 0;
 		int expense = gasRatio * shortestDistance;
 
-		System.out.println("Expense: " + expense);
+		System.out.println("Gas Expense: " + expense);
 		for (Car a : cars){
 			totalRevenue += taxiFareRatio * a.billableMileage;
 			//expense += gasRatio * a.mileage;
@@ -107,7 +110,7 @@ public class CrystalBall {
 		expense += cars.length * driverCost;
 
 		System.out.println("Total Revenue: " + totalRevenue);
-		System.out.println("Expense: " + expense);
+		System.out.println("Total Expense: " + expense);
 		System.out.println("Profit: " + (totalRevenue - expense));
 
 	}

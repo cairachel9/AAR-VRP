@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -118,4 +119,31 @@ public class Graph {
 		}
 	}
 
+	public Car closestCar(Passenger p, Collection<Car> cars) {
+		Car closestC = null;
+		int closestD = Integer.MAX_VALUE;
+		for (Car c : cars) {
+			int dist = distance.lookUpDistance(c.currentLocation,
+				p.pickUp);
+			if (dist < closestD) {
+				closestD = dist;
+				closestC = c;
+			}
+		}
+		return closestC;
+	}
+
+	public Passenger closestPassenger(Car c, Collection<Passenger> passengers) {
+		Passenger closestP = null;
+		int closestD = Integer.MAX_VALUE;
+		for (Passenger p : passengers) {
+			int dist = distance.lookUpDistance(c.currentLocation,
+				p.pickUp);
+			if (dist < closestD) {
+				closestD = dist;
+				closestP = p;
+			}
+		}
+		return closestP;
+	}
 }

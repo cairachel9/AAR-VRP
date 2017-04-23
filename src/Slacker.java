@@ -11,18 +11,17 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
- * An algorithm only check the latest request and dispatch based on 
- * immediate knowledge
+ * An algorithm which delays the dispatching until the last minute
  */
-public class PureGreedy {
+public class Slacker {
 
 	static int taxiFareRatio = 2;
 	static int gasRatio = 1;
 	static double carSpeed = 1;
 	static int driverCost = 1;
+  	static int slackBufferTime = 5;
 	static ArrayList<Passenger> passengers = new ArrayList<Passenger>();
 	static Set<Car> readyCars = new HashSet<Car>();
-
 
 	public static void main (String[] args) throws Exception{
 		ArrayList<Passenger> waitingList = new ArrayList<Passenger>();
@@ -103,32 +102,54 @@ public class PureGreedy {
 						a.mileage++;
 					}
 				} else {
+				  	// System.out.println("Car " + a + "is available @Time: " + t);
 					readyCars.add(a);
 				}
 			}
 
 			for (Passenger p : passengers){
-				if (p.servicable && p.callTime == t) { //check if new passengers have called in
-					//add passenger to waiting list
-					waitingList.add(p);
+				if (p.servicable) {
+				  if (p.callTime == t
+				      && p.dispatchTime < 0) { // calculate when to dispatch
+				    if (readyCars.isEmpty()) {
+				      p.dispatchTime = p.callTime;
+				    } else {
+				      Car c = expandedGraph.closestCar(p, readyCars);
+				      int dist1 = expandedGraph.distance.lookUpDistance(
+					  c.currentLocation, p.pickUp);
+				      int dist2 = expandedGraph.distance.lookUpDistance(p.pickUp,
+					  p.destination);
+				      int travelTime = (int)((dist1 + dist2) / carSpeed);
+				      p.dispatchTime = p.arrivalTime - travelTime - slackBufferTime;
+				      if (p.dispatchTime < 0) {
+					p.dispatchTime = p.callTime;
+				      }
+				    }
+				    System.out.println("Passenger: " + p + " dispatchTime: " + p.dispatchTime);
+				  }
+				  if (p.dispatchTime == t) { // Now we have to service it
+				    //add passenger to waiting list
+				    waitingList.add(p);
+				  }
 				}
 			}
 
-			Iterator<Passenger> it = waitingList.iterator();
-			while (it.hasNext()) { //get passengers in waiting list
-				Passenger p = it.next();
-				Car closest = expandedGraph.closestCar(p, readyCars);
-				if (closest != null) {
-					int closestDistance = expandedGraph.distance.lookUpDistance(
-						closest.currentLocation, p.pickUp);
-					//check if they can make it to the first passenger's destination in time
-					if (((p.getArrivalTime() - t) * carSpeed) - (closestDistance + p.travelDistance) >= 0) {
-						System.out.println("Assigning car: " + closest + " to passenger: " + p);
-						closest.assignPassenger(p);
-						it.remove();
-						readyCars.remove(closest);
-					}
-				}
+		  	// For each ready car, find the closest passenger
+		  	Iterator<Car> it = readyCars.iterator();
+		  	while (it.hasNext()) {
+			  Car c = it.next();
+			  if (!waitingList.isEmpty()) {
+			    Passenger closestP = expandedGraph.closestPassenger(c, waitingList);
+			    int closestDistance = expandedGraph.distance.lookUpDistance(c.currentLocation,
+				closestP.pickUp);
+			    // If it arrives on time
+			    if (((closestP.getArrivalTime() - t) * carSpeed) - (closestDistance + closestP.travelDistance) >= 0) {
+			      System.out.println("Assigning passenger " + closestP + " to car: " + c + " at time: " + t);
+			      c.assignPassenger(closestP);
+			      waitingList.remove(closestP);
+			      it.remove();
+			    }
+			  }
 			}
 
 			Iterator<Passenger> wit = waitingList.iterator();
@@ -150,7 +171,7 @@ public class PureGreedy {
 			System.out.println("Car " + a + " mileage: " + a.mileage );
 		}
 
-		System.out.println("Gas Expense: " + expense);
+		System.out.println("Gas expense: " + expense);
 		//System.out.println(cars.length + " " + driverCost);
 		expense += cars.length * driverCost;
 
