@@ -84,6 +84,8 @@ Crystal Ball knows all the future calling events, it knows it's better to group 
 * C1 will serve Alex and Bob
 * C2 will serve Callie
 
+![Crystal Ball route](img/AAR-CrystalBall.jpg)
+
 ### Slacker
 In Slacker, when Bob called, the system knows it can wait sending the car until 8:13.  By waiting it sees the new request from Callie and decide to send the car C2 to Callie instead:
 * C1 will serve Alex and Bob
