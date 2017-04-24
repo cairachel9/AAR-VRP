@@ -28,7 +28,7 @@ Crystal Ball assumes that you have a crystal ball and can see all the future cus
 
 ## Slacker
 
-Between the simple *Pure Greedy* and the expensive *Cyrstal Ball*, can we have a compromise solution?  Can we find a close-to-optimal solution with a reasonable running cost?
+Between the simple *Pure Greedy* and the expensive *Cyrstal Ball*, can we have a compromised solution?  Can we find a close-to-optimal solution with a reasonable running cost?
 
 Slacker bridges the gap by the following idea: when a customer calls, we don't have to send a car to her immmediately.  We can be a slacker, we promised the service but we procrastinate to the last minute.  How can we do that?  Because we know her travel destination and required arrival time, we know the shortest distance in the map and we know the travel time for that distance.  There is a slack buffer time before we actually need to send the car to her.  By delaying dispatching the car to her, we can wait for more customer calling in, and with more customer requesting accumulated, we can dispatch better in aggregates.
 
