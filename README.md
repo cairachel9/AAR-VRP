@@ -22,11 +22,15 @@ The idea behind pure greedy is simple.  For each passenger call request, we will
 
 ## Crystal Ball
 
-We know pure greedy is quick and simple.  But it probably wouldn't yield the optimal solution.  But what is the upper bound a best algorithm can achieve?  Crystal Ball assumes that you have a crystal ball and can see all the future customer requests.  If you see all future events, you can arrange the dispatching in most optimal way.  Crystal Ball algorithm exhaustively search all the solution space and find the best dispatching.  It's an exhausitive search algorithm which runs to exponential cost easily.  Dynamic programing technique was used to minimize the search cost.
+We know pure greedy is quick and simple.  But it probably wouldn't yield the optimal solution.  But what is the upper bound a best algorithm can achieve?
+
+Crystal Ball assumes that you have a crystal ball and can see all the future customer requests.  If you see all future events, you can arrange the dispatching in most optimal way.  Crystal Ball algorithm exhaustively search all the solution space and find the best dispatching.  It's an exhausitive search algorithm which runs to exponential cost easily.  Dynamic programing technique was used to minimize the search cost.
 
 ## Slacker
 
-Between the simple *Pure Greedy* and the expensive *Cyrstal Ball*, can we have a compromise solution?  Can we find a close-to-optimal solution with a reasonable running cost?  Slacker bridges the gap by the following idea: when a customer calls, we don't have to send a car to her immmediately.  We can be a slacker, we promised the service but we procrastinate to the last minute.  How can we do that?  Because we know her travel destination and required arrival time, we know the shortest distance in the map and we know the travel time for that distance.  There is a slack buffer time before we actually need to send the car to her.  By delaying dispatching the car to her, we can wait for more customer calling in, and with more customer requesting accumulated, we can dispatch better in aggregates.
+Between the simple *Pure Greedy* and the expensive *Cyrstal Ball*, can we have a compromise solution?  Can we find a close-to-optimal solution with a reasonable running cost?
+
+Slacker bridges the gap by the following idea: when a customer calls, we don't have to send a car to her immmediately.  We can be a slacker, we promised the service but we procrastinate to the last minute.  How can we do that?  Because we know her travel destination and required arrival time, we know the shortest distance in the map and we know the travel time for that distance.  There is a slack buffer time before we actually need to send the car to her.  By delaying dispatching the car to her, we can wait for more customer calling in, and with more customer requesting accumulated, we can dispatch better in aggregates.
 
 # Problem Setup and Computer Simulation
 
@@ -56,6 +60,7 @@ We will use the following simple use case to describe the difference between the
 
 * Two cars in the system: C1, C2
 * Three passengers calling:
+
 Passenger | Pickup Site | Dropoff Site | Call-in Time | Dropoff Time
 --------- | ----------- | ------------ | ------------ | ------------
 Alex      | A           | D            | 8:00         | 8:12
