@@ -52,19 +52,35 @@ In order to speed up the runtime performance, the shortest distance between any 
 
 ## Illustration of dispatching algorithms
 
+We will use the following simple use case to describe the difference between the algorithms:
+
+* Two cars in the system: C1, C2
+* Three passengers calling:
+Passenger | Pickup Site | Dropoff Site | Call-in Time | Dropoff Time
+--------- | ----------- | ------------ | ------------ | ------------
+Alex      | A           | D            | 8:00         | 8:12
+Box       | C           | D            | 8:01         | 8:40
+Callie    | A           | B            | 8:02         | 8:30
+
+* Road Map:
+
+### Pure Greedy
+### Crystal Ball
+### Slacker
+
 # Summary of Results
 
 ## Running Costs of the algorithms
 
 Assuming there are P passengers calling in the day and there are C number of cars in the system;
 
-Algorithm    | Pure Greedy | Slacker | Crystal Ball
+Metric       | Pure Greedy | Slacker | Crystal Ball
 ------------ | ----------- | ------- | ------------
-Running Time | P * C       | P * C * P | P ^ C * P ^ C
+Running Time | P * C       | P * C * P | (P ^ C) * (P ^ C)
 
 ## Business Profit/Loss for the above example
 
-Algorithm    | Pure Greedy | Slacker | Crystal Ball
+Metric       | Pure Greedy | Slacker | Crystal Ball
 ------------ | ----------- | ------- | ------------
 Revenue      | 42          | 42      | 28
 Cost         | 52          | 42      | 28
