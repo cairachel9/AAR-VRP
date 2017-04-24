@@ -59,6 +59,9 @@ In order to speed up the runtime performance, the shortest distance between any 
 We will use the following simple use case to describe the difference between the algorithms:
 
 * Road Map:
+
+![Sample topology road map](img/AAR-Topology.jpg)
+
 * Two cars in the fleet: C1, C2 with initial location at site A
 * Three passengers calling:
 
@@ -75,7 +78,7 @@ For each request coming in we will immediately dispatch the closest car:
 * For Callie's request, wait for C1 to become available, drive C1 from D back to A to pick up Callie
 
 ### Crystal Ball
-Crystal Ball know all the future calling events, it knows it's better to group Alex and Bob together
+Crystal Ball knows all the future calling events, it knows it's better to group Alex and Bob together to maximize profit
 * C1 will serve Alex and Bob
 * C2 will serve Callie
 
