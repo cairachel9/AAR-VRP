@@ -77,6 +77,8 @@ For each request coming in we will immediately dispatch the closest car:
 * For Bob's request, have car C2 drive from A to C to pick up Bob and drop him at D 
 * For Callie's request, wait for C1 to become available, drive C1 from D back to A to pick up Callie
 
+![Pure Greedy route](img/AAR-PureGreedy.jpg)
+
 ### Crystal Ball
 Crystal Ball knows all the future calling events, it knows it's better to group Alex and Bob together to maximize profit
 * C1 will serve Alex and Bob
