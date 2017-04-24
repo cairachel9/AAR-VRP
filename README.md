@@ -58,13 +58,13 @@ In order to speed up the runtime performance, the shortest distance between any 
 
 Assuming there are P passengers calling in the day and there are C number of cars in the system;
 
-             | Pure Greedy | Slacker | Crystal Ball
+Algorithm    | Pure Greedy | Slacker | Crystal Ball
 ------------ | ----------- | ------- | ------------
 Running Time | P * C       | P * C * P | P ^ C * P ^ C
 
 ## Business Profit/Loss for the above example
 
-             | Pure Greedy | Slacker | Crystal Ball
+Algorithm    | Pure Greedy | Slacker | Crystal Ball
 ------------ | ----------- | ------- | ------------
 Revenue      | 42          | 42      | 28
 Cost         | 52          | 42      | 28
