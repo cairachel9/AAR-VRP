@@ -58,20 +58,35 @@ In order to speed up the runtime performance, the shortest distance between any 
 
 We will use the following simple use case to describe the difference between the algorithms:
 
-* Two cars in the system: C1, C2
+* Road Map:
+* Two cars in the fleet: C1, C2 with initial location at site A
 * Three passengers calling:
 
 Passenger | Pickup Site | Dropoff Site | Call-in Time | Dropoff Time
 --------- | ----------- | ------------ | ------------ | ------------
 Alex      | A           | D            | 8:00         | 8:12
-Box       | C           | D            | 8:01         | 8:40
+Bob       | C           | D            | 8:01         | 8:40
 Callie    | A           | B            | 8:02         | 8:30
 
-* Road Map:
-
 ### Pure Greedy
+For each request coming in we will immediately dispatch the closest car:
+* For Alex's request: have car C1 pick up Alex at A, drop at D;
+* For Bob's request, have car C2 drive from A to C to pick up Bob and drop him at D 
+* For Callie's request, wait for C1 to become available, drive C1 from D back to A to pick up Callie
+
 ### Crystal Ball
+Crystal Ball know all the future calling events, it knows it's better to group Alex and Bob together
+* C1 will serve Alex and Bob
+* C2 will serve Callie
+
 ### Slacker
+In Slacker, when Bob called, the system knows it can wait sending the car until 8:13.  By waiting it sees the new request from Callie and decide to send the car C2 to Callie instead:
+* C1 will serve Alex and Bob
+* C2 will serve Callie
+
+### Observation
+
+If you look at the travel routes by _Pure Greedy_, you can see after dropping off Alex, car 1 are doing unnecessary idle driving (back from D to A) to pick up Callie;
 
 # Summary of Results
 
