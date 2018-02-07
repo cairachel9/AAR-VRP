@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * BST represents a binary search tree
+ */
 public class BST<T extends Comparable<T>>{
 	private T datum;
 	private BST<T> left;
