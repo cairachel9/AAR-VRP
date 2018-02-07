@@ -115,6 +115,6 @@ Profit/Loss  | -10         | 14      | 14
 
 # Future Work
 
-The study was a rudimentary study on the vehicle routing problem, a number of simplications were introduced due to time constraint (e.g. no car-pooling, no traffic in the road system) and only three algorithms were studied.  We would like the extend the study into more algorithms and with the introduction of car-pooling.  We would also like to study the effect of using historical data to predict the future calling patterns.
+The study was a rudimentary study on the vehicle routing problem, a number of simplications were introduced due to time constraint (e.g. no car-pooling, no traffic in the road system) and only three algorithms were studied.  We would like the extend the study into more algorithms and with the introduction of car-pooling.  We would also like to study the effect of using historical data to predict the future calling patterns.   
 
 # References
