@@ -1,5 +1,8 @@
 import java.util.LinkedList;
 
+/**
+ * A route links a series of nodes and edges
+ */
 public class Route {
 	LinkedList<Node> route;
 	int distance;

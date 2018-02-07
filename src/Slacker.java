@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 
 /**
  * An algorithm which delays the dispatching until the last minute
+ * such that it would try to chain multiple requests together.
  */
 public class Slacker {
 

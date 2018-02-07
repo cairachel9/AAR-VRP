@@ -1,5 +1,8 @@
 import java.util.LinkedList;
 
+/**
+ * Car class includes attributes and state information about Car.
+ */
 public class Car {
 	/**
 	 * car id

@@ -1,4 +1,6 @@
-
+/**
+ * A node represents a location in the map
+ */
 public class Node implements Comparable<Node> {
 	/**
 	 * name of location

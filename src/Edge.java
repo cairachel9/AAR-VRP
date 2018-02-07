@@ -1,4 +1,6 @@
-
+/**
+ * Edge links two nodes.
+ */
 public class Edge {
 	Node from;
 	Node to;

@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Graph represents the topology of the city map.
+ * It includes nodes and edges.
+ */
 public class Graph {
 	Set<Node> nodes = new HashSet<Node>();
 	Set<Edge> edges = new HashSet<Edge>();

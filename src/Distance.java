@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Distance class contains various utility methods for calculating distances
+ * between nodes and validation methods for the chain.
+ */
 public class Distance {
 	Map<String, LinkedList<Node>> map = new HashMap<String, LinkedList<Node>>();
 	Map<List<Passenger>, Integer> cachedDistance = new HashMap<>();

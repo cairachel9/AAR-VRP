@@ -2,6 +2,7 @@ import java.util.List;
 
 /**
  * A class represents Passenger.
+ * It includes information abuot passenger: name, pickup/drop location, call time
  */
 public class Passenger {
 	/**

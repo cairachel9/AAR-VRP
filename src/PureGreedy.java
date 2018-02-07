@@ -12,7 +12,8 @@ import java.util.StringTokenizer;
 
 /**
  * An algorithm only check the latest request and dispatch based on 
- * immediate knowledge
+ * immediate knowledge.
+ * It always dispatch the car to th nearest passenger
  */
 public class PureGreedy {
 
